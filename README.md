@@ -2,4 +2,5 @@
 ### to do:
 - Survey weighting
 - Insights, comparing ?s over time
-- Audience segmentation
+- Chi-square sign test
+- Cluster analysis
