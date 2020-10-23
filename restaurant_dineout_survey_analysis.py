@@ -2,7 +2,7 @@
 # ### Overview
 # A restaurant group wanted to gauge people's opinions towards to sit-down-dining during the COVID crisis
 # and track any changes over time.
-# Decided to measure this with a survey asking people how often they dine in a sitdown restaurant and how often they expected to
+# Measuring this with a survey asking people how often they eat at a sitdown restaurant and how often they expected to
 # in the coming year.
 # In June 2020 ran the initial survey. Followed up with a new survey in
 # October 2020
@@ -40,7 +40,7 @@
 
 
 
-# _* This is very much a work in progress_
+# _* This is a work in progress, more to come_
 
 
 
@@ -149,7 +149,7 @@ def survey_cleanup_weighting(path, file):
     return df
 
 #%% loading survey waves
-path = 'C:/Users/matth/environments/dsci1_env/restaurants_covid/'
+path = 'C:/Users/matth/environments/dsci1_env/restaurants_covid/survey_data/'
 file = 'Dining Out Survey (Responses) - Form Responses 1.csv'
 
 df_wv1 = survey_cleanup_weighting(path, file)
@@ -176,19 +176,16 @@ compare_waves('current', df_wv1, df_wv2)
 compare_waves('postcovid', df_wv1, df_wv2) 
 #%% [markdown]
 # ## Cluster Analysis
-#%% Clustering NEED TO UPDATE WITH WEIGHTED DATA
+#%% Clustering 
 df2 = df_wv1[['age_years', 'current_freq']].copy()
 df2.current_freq = df2.current_freq / df2.current_freq.max()
 df2.age_years= df2.age_years / df2.age_years.max()
+weights = df_wv1.wt 
 
 from sklearn.cluster import KMeans
 kmeans = KMeans(n_clusters=3, random_state=0)
-#df2 = df_wv1[['age_years', 'current_freq']].copy()
-#df2 = df_wv1[['current_freq']].copy()
 
-x = np.array(df2)
-#kmeans.fit(x)
-kmeans.fit(df2)
+kmeans.fit(df2, weights)
 df2['cluster'] = kmeans.labels_
 df2['age_years2'] = df_wv1['age_years']
 df2['current_freq2'] = df_wv1.current_freq
